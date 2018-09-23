@@ -8,6 +8,8 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
+using System.Threading.Tasks;
+
 namespace BankingServerData.DataStoreProvider
 {
     public class DataStoreProvider : IDataStoreProvider
@@ -18,7 +20,7 @@ namespace BankingServerData.DataStoreProvider
         //List<DataStore> myCachedData = new List<DataStore>();
 
         private IAmazonDynamoDB Client;
-        private DynamoDBContext context;
+        private IDynamoDBContext context;
         private Table dataStoreTable;
         private IJWTHelper myJWTHelper;
         public DataStoreProvider(IJWTHelper _myJWTHelper, IAmazonDynamoDB client)
@@ -28,24 +30,22 @@ namespace BankingServerData.DataStoreProvider
             dataStoreTable = Table.LoadTable(this.Client, "BankServer_UserData");
             this.myJWTHelper = _myJWTHelper;
         }
-        public DataStore getDataStore(string userName)
+        public async Task<DataStore> getDataStore(string userName)
         {
-            DataStore retrievedValue = context.LoadAsync<DataStore>(userName).Result;
+            DataStore retrievedValue = await context.LoadAsync<DataStore>(userName);
 
             return retrievedValue;
         }
-        public void setData(DataStore newDataStore)
+        public async Task<bool>  setData(DataStore newDataStore)
         {
-
-            try
+            DataStore retrievedValue = await context.LoadAsync<DataStore>(newDataStore.UserName);
+            if(retrievedValue != null)
             {
-                var task = context.DeleteAsync<DataStore>(newDataStore.UserName);
+                await context.DeleteAsync<DataStore>(newDataStore.UserName);
             }
-            catch(Exception e)
-            {
-
-            }
-            context.SaveAsync(newDataStore);
+            
+            await context.SaveAsync(newDataStore);
+            return true;
             //var existingData = myCachedData.Find(x => x.accountInformation.userName == newDataStore.accountInformation.userName);
             //if (existingData == null)
             //{
@@ -58,9 +58,9 @@ namespace BankingServerData.DataStoreProvider
             //    myCachedData.Add(newDataStore);
             //}
         }
-        public string attemptLogin(string userName, string password)
+        public async Task<string> attemptLogin(string userName, string password)
         {
-            var existingData = getDataStore(userName);
+            var existingData = await getDataStore(userName);
             if (existingData == null)
             {
                 return null;
@@ -73,27 +73,27 @@ namespace BankingServerData.DataStoreProvider
                 payload["userName"] = userName;
                 token = myJWTHelper.buildToken(userName);
                 existingData.currentToken = token;
-                setData(existingData);
+                await setData(existingData);
             }
             return token;
         }
 
-        public bool attemptLogout(string token)
+        public async Task<bool> attemptLogout(string token)
         {
-            var existingData = getRecordFromToken(token);
+            var existingData = await getRecordFromToken(token);
 
             if (existingData == null)
             {
                 return false;
             }
             existingData.currentToken = null;
-            setData(existingData);
+            await setData(existingData);
             return true;
         }
 
-        public bool checkAuthentication(string token)
+        public async Task<bool> checkAuthentication(string token)
         {
-            var existingData = getRecordFromToken(token);
+            var existingData = await getRecordFromToken(token);
 
             if (existingData == null || existingData.currentToken != token)
             {
@@ -105,18 +105,18 @@ namespace BankingServerData.DataStoreProvider
             }
         }
 
-        public decimal getCurrentBalance(string token)
+        public async Task<decimal> getCurrentBalance(string token)
         {
-            var existingData = getRecordFromToken(token);
+            var existingData = await getRecordFromToken(token);
 
             return existingData.currentBalance;
         }
 
 
 
-        public bool processWithdrawl(string token, decimal amount)
+        public async Task<bool> processWithdrawl(string token, decimal amount)
         {
-            var existingData = getRecordFromToken(token);
+            var existingData = await getRecordFromToken(token);
             if (amount > existingData.currentBalance)
             {
                 return false;
@@ -124,26 +124,28 @@ namespace BankingServerData.DataStoreProvider
 
             existingData.transactionHistory.Add(new TransactionHistory(DateTime.UtcNow, "Withdrawl", amount, existingData.currentBalance));
             existingData.currentBalance = existingData.currentBalance - amount;
+            await this.setData(existingData);
             return true;
         }
 
-        public bool processDeposit(string token, decimal amount)
+        public async Task<bool> processDeposit(string token, decimal amount)
         {
-            var existingData = getRecordFromToken(token);
+            var existingData = await getRecordFromToken(token);
 
             existingData.transactionHistory.Add(new TransactionHistory(DateTime.UtcNow, "Deposit", amount, existingData.currentBalance));
             existingData.currentBalance = existingData.currentBalance + amount;
+            await this.setData(existingData);
             return true;
         }
 
-        public List<TransactionHistory> getTransactionhistory(string token)
+        public async Task<List<TransactionHistory>> getTransactionhistory(string token)
         {
-            var existingData = getRecordFromToken(token);
+            var existingData = await getRecordFromToken(token);
             return existingData.transactionHistory.OrderByDescending(x => x.timeOfTransaction).ToList();
         }
 
         #region helpers
-        private DataStore getRecordFromToken(string token)
+        private async Task<DataStore> getRecordFromToken(string token)
         {
             string userName;
             try
@@ -154,7 +156,7 @@ namespace BankingServerData.DataStoreProvider
             {
                 return null;
             }
-            return getDataStore(userName);
+            return await getDataStore(userName);
         }
 
 

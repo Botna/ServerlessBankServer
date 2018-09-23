@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BankingServerProvider.IProviders
 {
     public interface ILedgerProvider
     {
-        Decimal getCurrentBalance(string authToken);
-        bool processWithdrawl(string authToken, Decimal amount);
-        bool processDeposit(string authToken, Decimal amount);
+        Task<Decimal> getCurrentBalance(string authToken);
+        Task<bool> processWithdrawl(string authToken, Decimal amount);
+        Task<bool> processDeposit(string authToken, Decimal amount);
     }
 }

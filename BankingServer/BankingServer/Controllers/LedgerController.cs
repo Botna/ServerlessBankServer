@@ -24,28 +24,37 @@ namespace BankingServer.Controllers
         //Gets our transaction history
         [Route("CurrentBalance")]
         [HttpGet]
-        public IActionResult CurrentBalance(string authToken)
+        public async Task<IActionResult> CurrentBalance(string authToken)
         {
-            if (userAccountProvider.isLoggedIn(authToken))
+            try
+            {
+                if (await userAccountProvider.isLoggedIn(authToken))
             {
 
-                return Ok(ledgerProvider.getCurrentBalance(authToken));
+                return Ok(await ledgerProvider.getCurrentBalance(authToken));
             }
             return BadRequest("User not presently logged in");
         }
+            catch(Exception e )
+            {
+                return BadRequest(e.Message);
+    }
+}
 
         //Posts a withdrawl
         [Route("Withdrawl")]
         [HttpPost]
-        public IActionResult Withdrawl(string authToken, [FromBody] Decimal amount)
+        public async Task<IActionResult> Withdrawl(string authToken, [FromBody] Decimal amount)
         {
-            if (amount <= 0)
+    try
+    {
+        if (amount <= 0)
             {
                 return BadRequest("Invaliad withdrawl amount");
             }
-            if (userAccountProvider.isLoggedIn(authToken))
+            if (await userAccountProvider.isLoggedIn(authToken))
             {
-                var result = ledgerProvider.processWithdrawl(authToken, amount);
+                var result = await ledgerProvider.processWithdrawl(authToken, amount);
                 if (result)
                 {
                     return Ok(JsonConvert.SerializeObject("Withdrew all the money"));
@@ -57,21 +66,27 @@ namespace BankingServer.Controllers
 
             }
             return BadRequest("User not presently logged in");
+}
+            catch(Exception e )
+            {
+                return BadRequest(e.Message);
+    }
         }
 
         //Posts a deposit
         [Route("Deposit")]
         [HttpPost]
-        public IActionResult Deposit(string authToken, [FromBody] Decimal amount)
+        public async Task<IActionResult> Deposit(string authToken, [FromBody] Decimal amount)
         {
+    try { 
             if (amount <= 0)
             {
                 return BadRequest("Invalid deposit amount");
             }
-            if (userAccountProvider.isLoggedIn(authToken))
+            if (await userAccountProvider.isLoggedIn(authToken))
             {
 
-                var result = ledgerProvider.processDeposit(authToken, amount);
+                var result = await ledgerProvider.processDeposit(authToken, amount);
                 if (result)
                 {
                     return Ok(JsonConvert.SerializeObject("Deposited all the money"));
@@ -82,6 +97,11 @@ namespace BankingServer.Controllers
                 }
             }
             return BadRequest("User not presently logged in");
+}
+            catch(Exception e )
+            {
+                return BadRequest(e.Message);
+    }
         }
     }
 }

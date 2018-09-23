@@ -23,32 +23,41 @@ namespace BankingServer.Controllers
         //Does not auto login.
         [Route("CreateAccount")]
         [HttpPost]
-        public IActionResult CreateAccount([FromBody] UserAccount myAccount)
+        public async Task<IActionResult> CreateAccount([FromBody] UserAccount myAccount)
         {
-            if (myAccount == null || string.IsNullOrEmpty(myAccount.password) || string.IsNullOrEmpty(myAccount.userName))
+            try
             {
-                return BadRequest("Invalid Username/Password");
+                if (myAccount == null || string.IsNullOrEmpty(myAccount.password) || string.IsNullOrEmpty(myAccount.userName))
+                {
+                    return BadRequest("Invalid Username/Password");
+                }
+                var createdSuccessfully = await userAccountProvider.createAccount(myAccount.userName, myAccount.password);
+                //Response.Headers["Access-Control-Allow-Origin"].Append("*");
+                if (createdSuccessfully)
+                {
+                    return Created("", null);
+                }
+                else
+                    return BadRequest("UserName already exists");
             }
-            var createdSuccessfully = userAccountProvider.createAccount(myAccount.userName, myAccount.password);
-            Response.Headers["Access-Control-Allow-Origin"].Append("*");
-            if (createdSuccessfully)
+            catch(Exception e )
             {
-                return Created("", null);
+                return BadRequest(e.Message);
             }
-            else
-                return BadRequest("UserName already exists");
         }
 
         //handles our login. Returns a short lived JWT.
         [Route("Login")]
         [HttpPost]
-        public IActionResult Login([FromBody] UserAccount myAccount)
+        public async Task<IActionResult> Login([FromBody] UserAccount myAccount)
         {
-            if (myAccount == null || string.IsNullOrEmpty(myAccount.password) || string.IsNullOrEmpty(myAccount.userName))
+            try
+            {
+                if (myAccount == null || string.IsNullOrEmpty(myAccount.password) || string.IsNullOrEmpty(myAccount.userName))
             {
                 return BadRequest("Invalid Username/Password");
             }
-            var token = userAccountProvider.login(myAccount.userName, myAccount.password);
+            var token = await userAccountProvider.login(myAccount.userName, myAccount.password);
             if (token != null)
             {
                 return Created("Logged In", JsonConvert.SerializeObject(token));
@@ -57,19 +66,25 @@ namespace BankingServer.Controllers
             {
                 return BadRequest("Username + Password combination was not accepted");
             }
-
         }
+            catch(Exception e )
+            {
+                return BadRequest(e.Message);
+    }
+
+}
 
         //handles logout.  Invalidates the token from the cache
         [Route("Logout")]
         [HttpPost]
-        public IActionResult Logout(string authToken)
+        public async Task<IActionResult> Logout(string authToken)
         {
+    try { 
             if (authToken == null)
             {
                 return BadRequest(null);
             }
-            var result = userAccountProvider.logout(authToken);
+            var result = await userAccountProvider.logout(authToken);
             if (result)
             {
                 return Ok("Succesfully Logged out");
@@ -77,6 +92,11 @@ namespace BankingServer.Controllers
             else
             {
                 return BadRequest("Error Logging out, call Andrew for advice =(");
+            }
+}
+            catch(Exception e )
+            {
+                return BadRequest(e.Message);
             }
         }
     }

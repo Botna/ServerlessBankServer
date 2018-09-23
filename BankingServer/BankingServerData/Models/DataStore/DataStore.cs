@@ -9,8 +9,14 @@ namespace BankingServerData.Models
     {
         [DynamoDBHashKey]
         public string UserName { get; set; }
+        public DataStore()
+        {
+
+        }
         public DataStore(string userName, string password)
         {
+            //Yay for duplicat keyeing.
+            this.UserName = userName;
             this.accountInformation = new UserAccount(userName, password);
             this.currentBalance = new decimal(0.0);
             this.transactionHistory = new List<TransactionHistory>();

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using BankingServerData.Models;
+using System.Threading.Tasks;
+
 namespace BankingServerProvider.IProviders
 {
     public interface IUserAccountProvider
     {
-        DataStore getAccountInfo(string userName, string authToken);
+        Task<bool> createAccount(string userName, string password);
 
-        bool createAccount(string userName, string password);
+        Task<string> login(string userName, string password);
 
-        string login(string userName, string password);
-
-        bool logout(string authToken);
-        bool isLoggedIn(string authToken);
+        Task<bool> logout(string authToken);
+        Task<bool> isLoggedIn(string authToken);
     }
 }

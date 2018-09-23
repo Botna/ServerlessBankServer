@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using BankingServerData.Models;
 using BankingServerData.DataStoreProvider;
+using System.Threading.Tasks;
 
 namespace BankingServerProvider.Providers
 {
@@ -15,9 +16,9 @@ namespace BankingServerProvider.Providers
             this.myDS = theDataStore;
         }
 
-        public List<TransactionHistory> getTransactionHistory(string authToken)
+        public async Task<List<TransactionHistory>> getTransactionHistory(string authToken)
         {
-            return myDS.getTransactionhistory(authToken);
+            return await myDS.getTransactionhistory(authToken);
         }
     }
 }

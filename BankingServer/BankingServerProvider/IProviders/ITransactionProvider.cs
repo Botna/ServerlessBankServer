@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BankingServerProvider.IProviders
 {
     public interface ITransactionProvider
     {
-        List<TransactionHistory> getTransactionHistory(string authToken);
+        Task<List<TransactionHistory>> getTransactionHistory(string authToken);
     }
 }

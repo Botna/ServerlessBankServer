@@ -3,6 +3,7 @@ using BankingServerProvider.IProviders;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BankingServerProvider.Providers
 {
@@ -14,19 +15,19 @@ namespace BankingServerProvider.Providers
         {
             this.myDS = theDataStore;
         }
-        public decimal getCurrentBalance(string authToken)
+        public async Task<decimal> getCurrentBalance(string authToken)
         {
-            return myDS.getCurrentBalance(authToken);
+            return await myDS.getCurrentBalance(authToken);
         }
 
-        public bool processDeposit(string authToken, decimal amount)
+        public async Task<bool> processDeposit(string authToken, decimal amount)
         {
-            return myDS.processDeposit(authToken, amount);
+            return await myDS.processDeposit(authToken, amount);
         }
 
-        public bool processWithdrawl(string authToken, decimal amount)
+        public async Task<bool> processWithdrawl(string authToken, decimal amount)
         {
-            return myDS.processWithdrawl(authToken, amount);
+            return await myDS.processWithdrawl(authToken, amount);
         }
     }
 }

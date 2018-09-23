@@ -10,7 +10,10 @@ namespace BankingServerData.Models
         public string typeOfTransaction { get; set; }
         public Decimal amount { get; set; }
         public Decimal startingAmount { get; set; }
+        public TransactionHistory()
+        {
 
+        }
         public TransactionHistory(DateTime timeOfTransaction, string typeOfTransaction, Decimal amount, Decimal startingAmount)
         {
             this.timeOfTransaction = timeOfTransaction;

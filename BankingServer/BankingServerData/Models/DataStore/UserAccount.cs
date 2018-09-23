@@ -10,7 +10,10 @@ namespace BankingServerData.Models
         public string userName { get; set; }
         //Never store passwords in plain text! but we are going to.
         public string password { get; set; }
+        public UserAccount()
+        {
 
+        }
 
         public UserAccount(string userName, string password)
         {

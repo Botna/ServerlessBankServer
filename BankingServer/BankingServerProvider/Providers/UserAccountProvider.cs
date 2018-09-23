@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using BankingServerData.Models;
 using BankingServerData.DataStoreProvider;
+using System.Threading.Tasks;
 
 namespace BankingServerProvider.Providers
 {
@@ -14,12 +15,12 @@ namespace BankingServerProvider.Providers
         {
             this.myDS = theDataStore;
         }
-        public bool createAccount(string userName, string password)
+        public async Task<bool> createAccount(string userName, string password)
         {
-            if (myDS.getDataStore(userName) == null)
+            if (await myDS.getDataStore(userName) == null)
             {
                 var newDataStore = new DataStore(userName, password);
-                myDS.setData(newDataStore);
+                await myDS.setData(newDataStore);
                 return true;
             }
             else
@@ -28,31 +29,26 @@ namespace BankingServerProvider.Providers
             }
         }
 
-        public DataStore getAccountInfo(string userName, string password)
+        public async Task<bool> isLoggedIn(string authToken)
         {
-            throw new NotImplementedException();
+            return await myDS.checkAuthentication(authToken);
         }
 
-        public bool isLoggedIn(string authToken)
+        public async Task<string> login(string userName, string password)
         {
-            return myDS.checkAuthentication(authToken);
-        }
-
-        public string login(string userName, string password)
-        {
-            var myDataStore = myDS.getDataStore(userName);
-            if (myDS.getDataStore(userName) == null)
+            var myDataStore =  await myDS.getDataStore(userName);
+            if (myDataStore == null)
             {
                 return null;
             }
 
-            return myDS.attemptLogin(userName, password);
+            return await myDS.attemptLogin(userName, password);
 
         }
 
-        public bool logout(string authToken)
+        public async Task<bool> logout(string authToken)
         {
-            return myDS.attemptLogout(authToken);
+            return await myDS.attemptLogout(authToken);
         }
 
 

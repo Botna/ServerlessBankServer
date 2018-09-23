@@ -2,21 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BankingServerData.DataStoreProvider
 {
     public interface IDataStoreProvider
     {
-        DataStore getDataStore(string userName);
+        Task<DataStore> getDataStore(string userName);
 
-        void setData(DataStore newData);
+        Task<bool> setData(DataStore newData);
 
-        string attemptLogin(string userName, string password);
-        bool attemptLogout(string token);
-        bool checkAuthentication(string token);
-        Decimal getCurrentBalance(string token);
-        bool processWithdrawl(string token, Decimal amount);
-        bool processDeposit(string token, Decimal amount);
-        List<TransactionHistory> getTransactionhistory(string token);
+        Task<string> attemptLogin(string userName, string password);
+        Task<bool> attemptLogout(string token);
+        Task<bool> checkAuthentication(string token);
+        Task<Decimal> getCurrentBalance(string token);
+        Task<bool> processWithdrawl(string token, Decimal amount);
+        Task<bool> processDeposit(string token, Decimal amount);
+        Task<List<TransactionHistory>> getTransactionhistory(string token);
     }
 }

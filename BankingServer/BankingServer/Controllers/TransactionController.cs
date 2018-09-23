@@ -23,14 +23,21 @@ namespace BankingServer.Controllers
         //Gets our transaction history
         [Route("History")]
         [HttpGet]
-        public IActionResult History(string authToken)
+        public async Task<IActionResult> History(string authToken)
         {
-            if (userAccountProvider.isLoggedIn(authToken))
+            try
+            {
+                if (await userAccountProvider.isLoggedIn(authToken))
             {
 
-                return Ok(transactionProvider.getTransactionHistory(authToken));
+                return Ok(await transactionProvider.getTransactionHistory(authToken));
             }
             return BadRequest("User not presently logged in");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
