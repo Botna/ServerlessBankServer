@@ -13,7 +13,7 @@ Clone Repo
 install .netcore 2.1 SDK (https://www.microsoft.com/net/download/dotnet-core/2.1)
 nuget restore
 
-Run via IIS or BankingServer (both use port 4967, which the UI can be configured to run against very easily). 
+Run via IIS or BankingServer (both use port 4967, which the UI can be configured to run against very easily). The Postman collection contains code to hit the acutal 'production' endpoints presently hosted on aws
 
 
 This was modified off of the initial webapi that was built for this project.  Since AWS.Dynamodbv2 libraries only have async methods, i had to put Async/Awaits throughout the entirity of the
