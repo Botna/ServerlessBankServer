@@ -1,0 +1,211 @@
+{
+	"info": {
+		"_postman_id": "ae4277d7-0d61-459c-9b7b-43f953fd02cd",
+		"name": "BankingServer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Creat Account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"asdf\",\r\n  \"password\": \"asdf\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:4967/Account/CreateAccount",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Account",
+						"CreateAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"asdf\",\r\n  \"password\": \"asdf\"\r\n}"
+				},
+				"url": {
+					"raw": "localhost:4967/Account/Login",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Account",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:4967/Account/Logout?authToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFuZHJldyJ9.AWU_Q4ikvIBpp6Wjv-EjY-Ld5v7m75ZUxLGCszyB1-c",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Account",
+						"Logout"
+					],
+					"query": [
+						{
+							"key": "authToken",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFuZHJldyJ9.AWU_Q4ikvIBpp6Wjv-EjY-Ld5v7m75ZUxLGCszyB1-c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBalance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:4967/Ledger/CurrentBalance?authToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI=",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Ledger",
+						"CurrentBalance"
+					],
+					"query": [
+						{
+							"key": "authToken",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deposit",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "43.00"
+				},
+				"url": {
+					"raw": "localhost:4967/Ledger/Deposit?authToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI=",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Ledger",
+						"Deposit"
+					],
+					"query": [
+						{
+							"key": "authToken",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Withdrawl",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "12.25"
+				},
+				"url": {
+					"raw": "localhost:4967/Ledger/Withdrawl?authToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI=",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Ledger",
+						"Withdrawl"
+					],
+					"query": [
+						{
+							"key": "authToken",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionHistory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost:4967/Transaction/History?authToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI=",
+					"host": [
+						"localhost"
+					],
+					"port": "4967",
+					"path": [
+						"Transaction",
+						"History"
+					],
+					"query": [
+						{
+							"key": "authToken",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6ImFzZGYifQ==.j-dHlLhAiWCfkXyVd_jOpVzVeNCA_ik_R5ZKcJY9gAI="
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
