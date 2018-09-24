@@ -24,5 +24,5 @@ utilize a more robust authentication system.
 Additionally, after learning extensively about containerization with AWS lambas and what actually happens behind the scenes when 2 calls come in at the same time, an internal cache was not possible with the way i initiall designed it.
 This project alone utilizes a horrendously designed DynamoDB table to data retention, so the api does have some 'memory'.
 
-I did a controller and a provider level set of unit tests to show the different concepts for those, most importantly mocking. DI was used for all objects that i could, some of the AWS functionality (specifically the Table class), 
-would give us some difficulty when unit testing.
+On the topic of warming, there is a second Lambda project to keep 2 lambda containers alive (which is close to the maximum number off concurrency i presently allow on my webAPI lambda, to prevent someone from charging me money).   this way, the user doenst have to wait for the 8seconds
+of warmup time, just a bit of warmup for connecting to the DYnamoDb table
